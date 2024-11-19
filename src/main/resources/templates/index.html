@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Racing Game</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #1a1a1a;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        .animation-container {
+            width: 300px;
+            height: 100px;
+            margin: 0 auto 30px;
+            background: #333;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .car {
+            width: 50px;
+            height: 30px;
+            background: #ff0000;
+            position: absolute;
+            bottom: 20px;
+            left: -50px;
+            animation: moveCar 4s linear infinite;
+        }
+
+        .car::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 10px;
+            width: 30px;
+            height: 12px;
+            background: #ff0000;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .wheels {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #000;
+            border-radius: 50%;
+            bottom: -5px;
+        }
+
+        .wheel1 { left: 5px; }
+        .wheel2 { right: 5px; }
+
+        @keyframes moveCar {
+            from { left: -50px; }
+            to { left: 300px; }
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 5px;
+            background: #ff3333;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #ff0000;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Racing Game</h1>
+        <div class="animation-container">
+            <div class="car">
+                <div class="wheels wheel1"></div>
+                <div class="wheels wheel2"></div>
+            </div>
+        </div>
+        <div class="form-container">
+            <input type="text" id="nickname" placeholder="Enter your nickname" />
+            <br>
+            <button onclick="startGame()">Start Game</button>
+        </div>
+    </div>
+
+    <script>
+        async function startGame() {
+            const nickname = document.getElementById('nickname').value.trim();
+            
+            if (!nickname) {
+                alert('Please enter a nickname!');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/player/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ nickname })
+                });
+
+                const data = await response.json();
+                
+                // Store player data in sessionStorage
+                sessionStorage.setItem('playerId', data.id);
+                sessionStorage.setItem('playerNickname', nickname);
+                sessionStorage.setItem('playerScore', data.score || 0);
+
+                // Redirect to game page
+                window.location.href = '/game';
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error connecting to server. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>

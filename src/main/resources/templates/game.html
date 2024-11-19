@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Racing Game</title>
+    <style>
+        body {
+            margin: 0;
+            background: #1a1a1a;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-controls {
+            width: 800px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        select {
+            padding: 8px;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+            border: 1px solid #666;
+        }
+
+        .game-info {
+            display: flex;
+            gap: 20px;
+        }
+
+        .info-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .start-screen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        #gameCanvas {
+            background: #333;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #ff3333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #ff0000;
+        }
+
+        .difficulty-easy { color: #4CAF50; }
+        .difficulty-medium { color: #FFC107; }
+        .difficulty-hard { color: #f44336; }
+
+    .collision-effect {
+        animation: pulse 0.1s ease-in-out alternate infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        100% {
+            transform: scale(1.2);
+        }
+    }
+
+    </style>
+</head>
+<body>
+    <div class="game-controls">
+        <div class="control-group">
+            <select id="carSelect" onchange="changeCar()">
+                <option value="standard">Standard Car</option>
+                <option value="sport">Sport Car</option>
+                <option value="super">Super Car</option>
+            </select>            
+            <select id="difficultySelect" onchange="changeDifficulty()">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
+        <div class="game-info">
+            <div class="info-item">Player: <span id="playerName"></span></div>
+            <div class="info-item">Time: <span id="timeLeft">60</span>s</div>
+            <div class="info-item">Score: <span id="score">0</span></div>
+            <div class="info-item">Coins: <span id="coinCount">0</span></div>
+        </div>
+    </div>
+    
+    <div style="position: relative">
+        <canvas id="gameCanvas"></canvas>
+        <div id="startScreen" class="start-screen">
+            <h2>Racing Game</h2>
+            <div style="margin-bottom: 20px;">
+                <h3>Difficulty Levels:</h3>
+                <p class="difficulty-easy">Easy: Few obstacles, more coins</p>
+                <p class="difficulty-medium">Medium: Balanced gameplay</p>
+                <p class="difficulty-hard">Hard: Many obstacles, high score multiplier</p>
+            </div>
+            <button onclick="startGame()">Start Game</button>
+        </div>
+    </div>
+
+    <script src="/js/game.js"></script>
+</body>
+</html>
